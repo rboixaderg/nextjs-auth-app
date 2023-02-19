@@ -3,7 +3,6 @@ import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 
 async function refreshAccessToken(jsonWebToken: JWT) {
-  console.log("refreshAccessToken");
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_GUILLOTINA}@login-renew`,
@@ -29,7 +28,6 @@ async function refreshAccessToken(jsonWebToken: JWT) {
       ).exp,
     };
   } catch (error) {
-    console.log("refreshAccessToken", error);
     return {
       ...jsonWebToken,
       error: "RefreshAccessTokenError",

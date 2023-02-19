@@ -27,7 +27,6 @@ export default function Home() {
 
 export const getServerSideProps = withSessionSsr(async function (context) {
   const sessionData = await getSessionSSR(context);
-  console.log("session index page", sessionData?.expires);
   if (sessionData) {
     return {
       props: {

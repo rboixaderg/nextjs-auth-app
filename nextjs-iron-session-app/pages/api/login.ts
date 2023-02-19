@@ -57,7 +57,6 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
           ).toString()
         ).exp,
       } as UserSession;
-      console.log("save user session");
       req.session.data = user;
       await req.session.save();
     } catch (err) {

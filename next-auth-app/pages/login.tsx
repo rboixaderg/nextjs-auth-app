@@ -53,7 +53,7 @@ export default function LoginPage() {
                 <div>
                   <label className={styles["section-header"]}>Username</label>
                   <input
-                    id="input-username-for-credentials-provider"
+                    data-test="usernameInput"
                     {...register("username", { required: true })}
                   />
                 </div>
@@ -61,6 +61,7 @@ export default function LoginPage() {
                   <label className={styles["section-header"]}>Password</label>
                   <input
                     type="password"
+                    data-test="passwordInput"
                     {...register("password", { required: true })}
                   />
                 </div>
