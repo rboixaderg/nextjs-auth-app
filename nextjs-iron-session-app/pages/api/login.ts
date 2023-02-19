@@ -28,6 +28,11 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
           }),
         }
       );
+      if (!loginResponse.ok) {
+        res.status(401);
+        res.json({});
+        return;
+      }
       const loginResponseData = await loginResponse.json();
       const userResponse = await fetch(
         `${process.env.NEXT_PUBLIC_GUILLOTINA}users/${username}`,

@@ -23,6 +23,7 @@ export function useAuth() {
           password: data.password,
         }),
       });
+
       if (response.ok) {
         await update();
         if (router.query["callbackUrl"]) {
@@ -31,9 +32,10 @@ export function useAuth() {
           router.push("/");
         }
       }
-      // if (response.error === "CredentialsSignin") {
-      //   throw "CredentialsSignin";
-      // }
+
+      if (response.status === 401) {
+        throw "CredentialsSignin";
+      }
     } catch (error) {
       throw new LoginErrorResponse("credentials error", 401);
     }
