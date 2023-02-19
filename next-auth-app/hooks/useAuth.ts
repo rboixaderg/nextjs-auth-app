@@ -10,7 +10,7 @@ export interface CredentialsData {
 }
 export function useAuth() {
   // Client only
-  const { user, token, clear, update } = useContext(AuthContext);
+  const { user, token, update } = useContext(AuthContext);
   const router = useRouter();
   async function login(data: CredentialsData) {
     try {
@@ -35,7 +35,6 @@ export function useAuth() {
   }
 
   function logout() {
-    clear();
     signOut({ redirect: false });
     router.push("/");
   }
