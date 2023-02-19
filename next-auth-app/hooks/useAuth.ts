@@ -34,8 +34,8 @@ export function useAuth() {
     }
   }
 
-  function logout() {
-    signOut({ redirect: false });
+  async function logout() {
+    await signOut({ redirect: false });
     router.push("/");
   }
 

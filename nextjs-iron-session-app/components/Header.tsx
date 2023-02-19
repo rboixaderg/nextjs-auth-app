@@ -19,7 +19,7 @@ export const Header = () => {
 
         {user && (
           <>
-            <button onClick={() => logout()}>Logout</button>
+            <button onClick={async () => await logout()}>Logout</button>
           </>
         )}
       </nav>
