@@ -39,7 +39,8 @@ cors:
   allow_credentials: true
   max_age: 3660
 jwt:
-  secret: foobar
+  secret: secretguillotinatest
   algorithm: HS256
+  token_expiration: 20
 jsapps:
   +admin: guillotina:static/executioner

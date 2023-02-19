@@ -1,0 +1,1 @@
+export const MINUTES_LEFT_EXPIRE_TOKEN = 30;
