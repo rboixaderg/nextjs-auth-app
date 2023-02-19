@@ -1,4 +1,4 @@
-import { MINUTES_LEFT_EXPIRE_TOKEN } from "@/core/constants";
+import { SECONDS_LEFT_EXPIRE_TOKEN } from "@/core/constants";
 import { UserSession } from "@/types/session";
 import { refreshAccessToken } from "./refreshToken";
 
@@ -8,7 +8,7 @@ export async function getSession(
   const currentTime = new Date().getTime() / 1000;
   if (
     currentTime < (sessionData?.expires ?? 0) &&
-    currentTime + MINUTES_LEFT_EXPIRE_TOKEN * 60 > (sessionData?.expires ?? 0)
+    currentTime + SECONDS_LEFT_EXPIRE_TOKEN > (sessionData?.expires ?? 0)
   ) {
     try {
       const data = await refreshAccessToken(sessionData!);

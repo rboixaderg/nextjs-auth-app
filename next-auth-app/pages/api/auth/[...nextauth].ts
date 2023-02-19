@@ -1,3 +1,7 @@
+import {
+  SECONDS_LEFT_EXPIRE_TOKEN,
+  SESSION_TTL_IN_SECONDS,
+} from "@/core/constants";
 import NextAuth, { AuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
@@ -85,7 +89,6 @@ const providers = [
   }),
 ];
 
-const MINUTES_LEFT_EXPIRE_TOKEN = 30;
 const callbacks = {
   async jwt({ token, user }: { token: JWT; user?: User }) {
     if (user) {
@@ -100,7 +103,7 @@ const callbacks = {
     const currentTime = new Date().getTime() / 1000;
     if (
       currentTime < (token?.expires ?? 0) &&
-      currentTime + MINUTES_LEFT_EXPIRE_TOKEN * 60 > (token?.expires ?? 0)
+      currentTime + SECONDS_LEFT_EXPIRE_TOKEN > (token?.expires ?? 0)
     ) {
       return refreshAccessToken(token);
     }
@@ -130,7 +133,7 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    maxAge: 20, // 20seg
+    maxAge: SESSION_TTL_IN_SECONDS, // 20seg
   },
 };
 
