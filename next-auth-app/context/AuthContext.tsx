@@ -1,4 +1,5 @@
-import { getSession, useSession } from "next-auth/react";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 import { createContext, useEffect, useState } from "react";
 import { GuillotinaUser } from "types/guillotina";
 
@@ -7,11 +8,11 @@ export type UserContextType = {
   token: string | undefined;
   clear: () => void;
   update: () => void;
-  isLoadingSession: boolean;
 };
 
 interface AuthContextProviderProps {
   children: React.ReactNode;
+  session: Session;
 }
 
 export const AuthContext = createContext<UserContextType>({
@@ -19,45 +20,41 @@ export const AuthContext = createContext<UserContextType>({
   token: undefined,
   clear: () => {},
   update: () => {},
-  isLoadingSession: false,
 });
 
-export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const { data: session, status } = useSession();
-
-  const [user, setUser] = useState<GuillotinaUser | undefined>(session?.user);
-  const [token, setToken] = useState<string | undefined>(session?.accessToken);
-  const [isLoadingSession, setIsLoadingSession] = useState<boolean>(false);
-
+export function AuthContextProvider({
+  children,
+  session: sessionProps,
+}: AuthContextProviderProps) {
+  const [session, setSession] = useState<Session | undefined>(
+    sessionProps ?? undefined
+  );
   useEffect(() => {
-    if (session && "user" in session) {
-      setUser(session.user);
-      setToken(session.accessToken);
+    if (sessionProps && "user" in sessionProps) {
+      setSession(sessionProps);
+    } else {
+      clear();
     }
-    setIsLoadingSession(status === "loading");
-  }, [session, status]);
+  }, [sessionProps]);
 
   async function update() {
     const session = await getSession();
     if (session && "user" in session) {
-      setUser(session.user);
-      setToken(session.accessToken);
+      setSession(session);
     } else {
       clear();
     }
   }
 
   function clear() {
-    setUser(undefined);
-    setToken(undefined);
+    setSession(undefined);
   }
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        token,
-        isLoadingSession,
+        user: session?.user,
+        token: session?.accessToken,
         clear,
         update,
       }}
