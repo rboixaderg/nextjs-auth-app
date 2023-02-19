@@ -1,7 +1,6 @@
 import { CustomError } from "@/types/global";
 import { UserSession } from "@/types/session";
 import { createContext, useEffect, useState } from "react";
-import useSWR from "swr";
 import { GuillotinaUser } from "types/guillotina";
 
 export type UserContextType = {
@@ -9,7 +8,6 @@ export type UserContextType = {
   token: string | undefined;
   clear: () => void;
   update: () => void;
-  isLoadingSession: boolean;
 };
 
 interface AuthContextProviderProps {
@@ -22,7 +20,6 @@ export const AuthContext = createContext<UserContextType>({
   token: undefined,
   clear: () => {},
   update: () => {},
-  isLoadingSession: false,
 });
 
 const fetcher = async (url: string) => {
@@ -43,12 +40,10 @@ const fetcher = async (url: string) => {
   return res.json();
 };
 
-const privatePages = ["/private"];
 export function AuthContextProvider({
   children,
   session: sessionProp,
 }: AuthContextProviderProps) {
-  const { mutate, isLoading } = useSWR<UserSession>("/api/user", fetcher);
   const [session, setSession] = useState<UserSession | undefined>(sessionProp);
 
   useEffect(() => {
@@ -60,7 +55,7 @@ export function AuthContextProvider({
   }, [sessionProp]);
 
   async function update() {
-    const session = await mutate();
+    const session = await fetcher("/api/session");
     if (session && "user" in session) {
       setSession(session);
     } else {
@@ -77,7 +72,6 @@ export function AuthContextProvider({
       value={{
         user: session?.user,
         token: session?.accessToken,
-        isLoadingSession: isLoading,
         clear,
         update,
       }}

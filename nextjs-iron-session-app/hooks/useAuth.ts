@@ -10,8 +10,7 @@ export interface CredentialsData {
 }
 export function useAuth() {
   // Client only
-  const { user, token, clear, update, isLoadingSession } =
-    useContext(AuthContext);
+  const { user, token, clear, update } = useContext(AuthContext);
   const router = useRouter();
   async function login(data: CredentialsData) {
     try {
@@ -51,7 +50,6 @@ export function useAuth() {
     token: token,
     user,
     isLogged: user !== undefined,
-    isLoading: isLoadingSession,
     login,
     logout,
   };
